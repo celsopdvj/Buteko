@@ -43,7 +43,7 @@ $cliente = pg_fetch_all($resultCliente);
 
 <body>
 
-<table>
+<table id="table-novo-pedido">
 	<tr>
 		<td align="right">
 			<label for="opcoes-item">Adicionar Item:</label>
@@ -63,25 +63,25 @@ $cliente = pg_fetch_all($resultCliente);
 
 		<td>
 			<label for="atendente">Atendente:</label>
-			<select class="selectpicker" style="height: 32px;" >
-				  <optgroup label="Garçom" id="atendente">
+			<select class="selectpicker" style="height: 32px;" id="atendente">
+				  <optgroup label="Garçom">
 				    <?php 
 					foreach ($garcom as $row) {
-						echo "<option value='". $row['cod_garcom'] . "'>" . $row['nome'] . "</option>";
+						echo "<option value='ga_". $row['cod_garcom'] . "'>" . $row['nome'] . "</option>";
 					}
 					?>
 				  </optgroup>
 				  <optgroup label="Gerente">
 				    <?php 
 					foreach ($gerente as $row) {
-						echo "<option value='". $row['cod_gerente'] . "'>" . $row['nome'] . "</option>";
+						echo "<option value='ge_". $row['cod_gerente'] . "'>" . $row['nome'] . "</option>";
 					}
 					?>
 				  </optgroup>
 				  <optgroup label="Cliente">
 				    <?php 
 					foreach ($cliente as $row) {
-						echo "<option value='". $row['cod_cliente'] . "'>" . $row['nome'] . "</option>";
+						echo "<option value='cl_". $row['cod_cliente'] . "'>" . $row['nome'] . "</option>";
 					}
 					?>
 				  </optgroup>

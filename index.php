@@ -26,13 +26,7 @@
 	<tr>
 		<td width="82%">
 			<button type="button" class="btn btn-default" aria-label="Left Align" title="Novo Pedido" id="newpedido">
-				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-			</button>
-			<button type="button" class="btn btn-default" aria-label="Left Align" title="Novo Prato	">
-				<span class="glyphicon glyphicon-glass" aria-hidden="true"></span>
-			</button>
-			<button type="button" class="btn btn-default" aria-label="Left Align" title="Novo Cadastro">
-				<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Novo Pedido
 			</button>
 		</td>
 		<td align="right">
@@ -81,6 +75,7 @@
         <table id="conteudo-novo-pedido" class="table table-striped" width="100%"></table>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-default" id="salvar-pedido">Salvar</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
@@ -155,6 +150,7 @@
                         url: page,
                         success: function (msg)
                         {
+                        	$("#conteudo-novo-pedido > tbody").empty();
                             $("#conteudo-novo-pedido").html(msg);
                             $("#novo-pedido").modal("toggle");
                         },
@@ -162,13 +158,47 @@
                         {
                         	$("#add-item").on("click", function(){
 						        $("#conteudo-novo-pedido > tbody:last-child").append(
-						        	"<tr id='" + $("#opcoes-item").val() + "'><td colspan='3' style='text-align: center;'>" 
+						        	"<tr class='linhas' id='" + $("#opcoes-item").val() + "'><td colspan='3' style='text-align: center;'>" 
 						        	+ $("#opcoes-item :selected").text() + "</td></tr>"
 						        )
+						    });
+
+						    $("#conteudo-novo-pedido").delegate("tr.linhas", "click", function(){
+						        if(this.id) $(this).remove();
 						    });
                         }
                     });
         }
+
+
+        $('#salvar-pedido').on("click",function(){
+        	var dados = [];
+        	$("#conteudo-novo-pedido > tbody > tr").each(function(){
+        		if(this.id)
+        		{
+        			dados.push(this.id);
+        		}
+        	})
+
+        	var page = "salvarpedido.php";
+        	var atendente = $("#atendente").val();
+            $.ajax
+                    ({
+                        type: 'POST',
+                        dataType: 'html',
+                        url: page,
+                        data: {dados:dados,atendente:atendente},
+                        success: function (msg)
+                        {
+                            $("#conteudo-novo-pedido").html(msg);
+                        },
+                        complete: function()
+                        {
+                        	pedidos($("#filtrar").val());
+                        }
+                    });
+
+        })
 
 </script>
 

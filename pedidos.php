@@ -6,7 +6,7 @@ $table =  pg_connect(
 				dbname=	buteko
 				user=	postgres
 				password=123456'
-);
+);	
 
 $status = $_POST['filtro'];
 
@@ -35,6 +35,8 @@ $query = '
 
 		if(!empty($status))
 			$query.= "WHERE pedido.status = '$status'";
+
+		$query.='ORDER BY pedido.cod_pedido DESC';
 
 		$result = pg_exec($table,$query);
 		$linhas = pg_num_rows($result);
