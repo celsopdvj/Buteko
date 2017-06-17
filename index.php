@@ -173,7 +173,7 @@
 
         $('#salvar-pedido').on("click",function(){
         	var dados = [];
-        	$("#conteudo-novo-pedido > tbody > tr").each(function(){
+        	$("#conteudo-novo-pedido tr.linhas").each(function(){
         		if(this.id)
         		{
         			dados.push(this.id);
