@@ -12,6 +12,7 @@ $table =  pg_connect(
 
 $dados = $_POST['dados'];
 $atendente = preg_split('[_]', $_POST['atendente']);
+$mesa = $_POST['mesa'];
 $tipoAtendente = $atendente[0];
 $atendente = $atendente[1];
 
@@ -21,10 +22,15 @@ $ultimo = pg_fetch_row($q_ultimo);
 $q_item = pg_exec($table,'SELECT MAX(cod_item_pedido) FROM "ItemPedido"');
 $item = pg_fetch_row($q_item);
 
+$q_ultimaMesa = pg_exec($table,'SELECT MAX(cod_mesa_pedido) FROM "MesaPedido"');
+$ultimaMesa = pg_fetch_row($q_ultimaMesa);
+
 $ultimo = $ultimo[0];
 $ultimo++;
 $item = $item[0];
 $item++;
+$ultimaMesa = $ultimaMesa[0];
+$ultimaMesa++;
 
 if($dados)
 {
@@ -50,6 +56,13 @@ if($dados)
 	}
 	$query.=$linha;
 	$result = pg_exec($table,$query);
+
+	$horario = date("H:i:s");
+
+	$q_mesa = 'INSERT INTO "MesaPedido"(cod_mesa_pedido,data,horario,cod_pedido,cod_mesa)
+	 	       VALUES ('. $ultimaMesa . ",'" . $data . "','" . $horario . "'," . $ultimo . ',' . $mesa . ')
+	';
+	$resultMesa = pg_exec($table,$q_mesa);
 
 	echo '<p>Sucesso</p>';
 }

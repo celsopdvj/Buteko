@@ -6,6 +6,20 @@
 #listagem tr:hover {
 	background-color: #d6d4d4;
 }
+
+img {
+    width: 24px;
+    height: 24px;
+}
+
+tr.linhas img{
+  display: none;
+}
+
+tr.linhas:hover img{
+  display: inline-block;
+}
+
 </style>
 
 <head>
@@ -158,8 +172,10 @@
                         {
                         	$("#add-item").on("click", function(){
 						        $("#conteudo-novo-pedido > tbody:last-child").append(
-						        	"<tr class='linhas' id='" + $("#opcoes-item").val() + "'><td colspan='3' style='text-align: center;'>" 
-						        	+ $("#opcoes-item :selected").text() + "</td></tr>"
+						        	"<tr class='linhas' id='" + $("#opcoes-item").val() + "'><td colspan='4' style='text-align: center;'>" 
+						        	+ $("#opcoes-item :selected").text() +  
+                                    "&nbsp;  <img src='excluir.png' alt='Exlcuir'> </td>"+
+                                    "</tr>"
 						        )
 						    });
 
@@ -182,12 +198,13 @@
 
         	var page = "salvarpedido.php";
         	var atendente = $("#atendente").val();
+            var mesa = $("#mesa").val();
             $.ajax
                     ({
                         type: 'POST',
                         dataType: 'html',
                         url: page,
-                        data: {dados:dados,atendente:atendente},
+                        data: {dados:dados,atendente:atendente,mesa:mesa},
                         success: function (msg)
                         {
                             $("#conteudo-novo-pedido").html(msg);

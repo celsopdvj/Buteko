@@ -29,12 +29,16 @@ $query = '
 		WHERE item.cod_pedido = pedido.cod_pedido
 		) as valor_pedido,
 		cards.nome as itens_cardapio_do_pedido,
-		cards.valor as unitario
+		cards.valor as unitario,
+		mesa.horario,
+		mesa.cod_mesa
 		FROM "Pedido" AS pedido
 		LEFT JOIN "ItemPedido" itens
 		ON itens.cod_pedido = pedido.cod_pedido
 		LEFT JOIN "ItemCardapio" cards
 		ON itens.cod_item_cardapio = cards.cod_item_cardapio
+		LEFT JOIN "MesaPedido" AS mesa
+		ON mesa.cod_pedido = pedido.cod_pedido 
 		WHERE pedido.cod_pedido = '.$id;
 
 		$result = pg_exec($table,$query);
@@ -60,6 +64,10 @@ $query = '
 		echo "<tr>";
 		echo '<td> <b>Data: </b>' . date_format(new DateTime($dados[0]['data_pedido']),'d/m/Y') . '</td>';
 		echo "<td align='center'><b> Atendente: </b>" . $dados[0]['atendente'] . "</td>";
+		echo '</tr>';
+		echo '<tr>';
+		echo "<td align='left'> <b>Mesa: </b>".$dados[0]['cod_mesa'] . '</td>';
+		echo "<td align='center'> <b>Horário: </b>". $dados[0]['horario'] . '</td>';
 		echo '</tr>';
 
 		foreach($dados as $row) {

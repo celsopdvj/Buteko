@@ -28,14 +28,23 @@ $selectCliente = '
 		FROM "Cliente"
 ';
 
+$selectMesa = '
+		SELECT *
+		FROM "Mesa"
+';
+
 $result = pg_exec($table,$query);
 $resultGerente = pg_exec($table,$selectGerente);
 $resultGarcom = pg_exec($table,$selectGarcom);
 $resultCliente = pg_exec($table,$selectCliente);
+$resultMesa = pg_exec($table,$selectMesa);
+
+
 $dados =  pg_fetch_all($result);
 $gerente = pg_fetch_all($resultGerente);
 $garcom = pg_fetch_all($resultGarcom);
 $cliente = pg_fetch_all($resultCliente);
+$mesa = pg_fetch_all($resultMesa);
 
 ?>
 
@@ -87,6 +96,16 @@ $cliente = pg_fetch_all($resultCliente);
 				  </optgroup>
 			</select>
 
+		</td>
+		<td>
+			<label for="mesa">Mesa:</label>
+			<select id="mesa" class="selectpicker" style="height: 32px;">
+				<?php
+					foreach ($mesa as $row) {
+						echo "<option id='".$row['cod_mesa']."'>".$row['cod_mesa'].'</option>';
+					}
+				?>
+			</select>
 		</td>
 	</tr>
 </table>	

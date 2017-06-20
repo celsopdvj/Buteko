@@ -29,14 +29,17 @@ $query = '
 		WHERE item.cod_pedido = pedido.cod_pedido
 		) as valor,
 		pedido.status,
-		pedido.cod_pedido as codigo
+		pedido.cod_pedido as codigo,
+		mesa.horario
 		FROM "Pedido" AS pedido
+		LEFT JOIN "MesaPedido" AS mesa
+		ON mesa.cod_pedido = pedido.cod_pedido 
 		';
 
 		if(!empty($status))
 			$query.= "WHERE pedido.status = '$status'";
 
-		$query.='ORDER BY pedido.cod_pedido DESC';
+		$query.='ORDER BY pedido.data DESC,mesa.horario DESC';
 
 		$result = pg_exec($table,$query);
 		$linhas = pg_num_rows($result);
@@ -57,10 +60,10 @@ $query = '
 	<table id="listagem" align="center" width="80%" class="table table-striped" style="text-align: center;">
 
 		<tr>
-			<th width="10%" style="text-align: center;">
+			<th width="15%" style="text-align: center;">
 				Data
 			</th>
-			<th width="40%" style="text-align: center;">
+			<th width="35%" style="text-align: center;">
 				Atendente
 			</th>
 			<th width="40%" style="text-align: center;">
@@ -74,10 +77,12 @@ $query = '
 		<?php foreach($dados as $row) {
 
 				$valor = empty($row['valor'])?"R$0,00":$row['valor'];
+				$data = preg_split('[-]', $row['data']);
+				$data = $data[2].'/'.$data[1].'/'.$data[0];
 
 				echo "<tr class='rows' id='" . $row['codigo'] . "'>";
 				
-					echo '<td>' . date_format(new DateTime($row['data']),'d/m/Y') . '</td>';
+					echo '<td>' . $data . ' - '. $row['horario'] .'</td>';
 					echo '<td>' . $row['atendente'] . '</td>';
 					echo '<td>' . $row['status'] . '</td>';
 					echo '<td>' . $valor . '</td>';
